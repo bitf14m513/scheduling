@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+int arr[100];
+int main()
+{
+  //array initializtion for number 100
+  for(int w=0;w<100;w++)
+  {
+   arr[w]=w+1;
+  }
+  int sumchild=0;
+  int sumparent=0;
+  int sumtotal=0;
+  pid_t pid=-1;
+  for(int i=0;i<2;i++)
+  { 
+    if(i==1)
+    { sumparent=0;sumchild=0;}
+    pid =fork();
+    if( pid == 0 )
+    {
+     printf("i am child number %d and my pid is : %d \n",i+1,getpid());    
+     if(i==0)
+     {
+      for(int b=0;b<25;b++)
+      {
+       sumchild+=arr[b];
+      }
+      printf("sum of********************** first child 1ST PROCESS is %d\n",sumchild);
+     }
+     if(i==1)
+     {
+      for(int b=50;b<75;b++)
+      {
+       sumchild+=arr[b];
+      }
+      printf("sum of********************** second child  3nd PROCESS is %d\n",sumchild);
+     }
+     printf("child %d task sumchild result is :%d \n",i+1,sumchild);  
+     sumtotal+=(sumchild);
+     printf("child %d task sumchildtotal result is :%d \n",i+1,sumtotal); 
+    }
+    else if( pid == -1)
+    { 
+     printf("fail to forking ....\n");
+     exit(0);
+    }
+    else
+    {
+     printf("i am parent of child %d my pid is :%d-- my child will be : %d\n",i+1,getpid(),pid);
+     if(i==0)
+     { 
+      for(int a=25;a<50;a++)
+      {
+       sumparent+=arr[a];
+      }
+      printf("sum of********************** first parent 2nd process result is %d\n",sumparent);
+     }
+     if(i==1)
+      {
+       for(int a=75;a<100;a++)
+       {
+        sumparent+=arr[a];
+       }
+       printf("sum of********************** second parent 4th process reult is %d\n",sumparent);
+      }
+     printf("parent %d task sumparent result is :%d \n",i+1,sumparent);     
+     sumtotal+=sumparent;
+     printf("parent %d task sumparenttotal result is :%d \n",i+1,sumtotal);     
+    }
+ if(i==1){sumtotal+=sumtotal;}
+  }
+  sleep(1);
+  printf("task total result is :%d\n",sumtotal);     
+  return 0;
+}
